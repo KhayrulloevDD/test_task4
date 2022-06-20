@@ -1,4 +1,5 @@
 import pandas as pd
+import timeit
 
 
 def main():
@@ -30,11 +31,17 @@ def main():
 def add_columns_from_dict(column_name, column_value_dict, new_row):
     for key, value in column_value_dict.items():
         if isinstance(value, dict):
-            new_row = add_columns_from_dict(key, column_value_dict[key], new_row)
+            new_row = add_columns_from_dict(f'{column_name}.{key}', column_value_dict[key], new_row)
         else:
             new_row[f'{column_name}.{key}'] = value
     return new_row
 
 
 if __name__ == "__main__":
+    start = timeit.default_timer()
+
     main()
+
+    spent = timeit.default_timer() - start
+
+    print(f'Время выполнения: {round(spent, 2)} секунд')
